@@ -20,17 +20,11 @@ import {
   Languages
 } from 'lucide-react';
 
-const API_URL = import.meta.env.DEV 
-  ? 'http://localhost:3000/api/chat' 
-  : '/api/chat';
+const BASE_URL = 'https://dealangler-chatbot-ai-assistant-hwf.vercel.app';
 
-const LEAD_API_URL = import.meta.env.DEV 
-  ? 'http://localhost:3000/api/lead' 
-  : '/api/lead';
-
-const ANALYTICS_API_URL = import.meta.env.DEV 
-  ? 'http://localhost:3000/api/analytics' 
-  : '/api/analytics';
+const API_URL = `${BASE_URL}/api/chat`;
+const LEAD_API_URL = `${BASE_URL}/api/lead`;
+const ANALYTICS_API_URL = `${BASE_URL}/api/analytics`;
 
 function App() {
   const [messages, setMessages] = useState([]);
