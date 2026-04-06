@@ -44,7 +44,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [leadData, setLeadData] = useState({});
-  const [hasStarted, setHasStarted] = useState(false);
+  const [showHome, setShowHome] = useState(false);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -61,7 +61,7 @@ function App() {
     const text = overrideText || inputText.trim();
     if (!text || isLoading) return;
 
-    if (!hasStarted) setHasStarted(true);
+    setShowHome(false);
     if (!overrideText) setInputText('');
 
     const newMessages = [...messages, { role: 'user', content: text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }];
@@ -113,7 +113,7 @@ function App() {
 
   const clearChat = () => {
     setMessages([]);
-    setHasStarted(false);
+    setShowHome(false);
     setLeadData({});
     setInputText('');
   };
@@ -265,18 +265,8 @@ function App() {
         <header className="chat-header">
           <div className="chat-header-left">
             <button className="menu-toggle" onClick={() => setSidebarOpen(true)}><Menu size={22} /></button>
-            {!hasStarted && messages.length > 0 && (
-              <button
-                type="button"
-                className="back-btn"
-                onClick={() => setHasStarted(true)}
-                title="Back to conversation"
-              >
-                ← Chat
-              </button>
-            )}
-            {hasStarted && (
-              <button type="button" className="back-btn" onClick={() => setHasStarted(false)} title="Back to Home">
+            {messages.length > 0 && !showHome && (
+              <button type="button" className="back-btn" onClick={() => setShowHome(true)} title="Back to Home">
                 ← Home
               </button>
             )}
@@ -298,7 +288,7 @@ function App() {
         </header>
 
         <div className="messages-area">
-          {!hasStarted && (
+          {(messages.length === 0 || showHome) && (
             <div className="welcome-state">
               <div className="welcome-icon">
                 <img src="/logo.png" alt="DealAngler" className="welcome-logo-img" width={360} height={120} decoding="async" />
@@ -308,7 +298,7 @@ function App() {
                 Your AI-powered local marketplace assistant. Ask me anything about buying, selling, promotions, safety, or advertising — in any language.
               </p>
               {messages.length > 0 && (
-                <button className="continue-chat-btn" onClick={() => setHasStarted(true)}>
+                <button type="button" className="continue-chat-btn" onClick={() => setShowHome(false)}>
                   💬 Continue Conversation →
                 </button>
               )}
@@ -319,7 +309,7 @@ function App() {
                   { icon: '⚡', label: 'Promotions', desc: 'Get seen faster', text: 'What upgrade and promotion options are available and how do they work?' },
                   { icon: '📢', label: 'Advertise', desc: 'Grow your local business', text: 'How can my local business advertise on DealAngler?' },
                 ].map((act, i) => (
-                  <button key={i} className="quick-action-btn" onClick={() => handleSendMessage(act.text)}>
+                  <button key={i} type="button" className="quick-action-btn" onClick={() => handleSendMessage(act.text)}>
                     <div className="qa-icon">{act.icon}</div>
                     <div className="qa-label">{act.label}</div>
                     <div className="qa-desc">{act.desc}</div>
@@ -329,7 +319,7 @@ function App() {
             </div>
           )}
 
-          {messages.map((msg, i) => {
+          {messages.length > 0 && !showHome && messages.map((msg, i) => {
             if (msg.role === 'lead_form') {
               return (
                 <div key={i} className="msg-group">
@@ -368,7 +358,7 @@ function App() {
             );
           })}
 
-          {isLoading && (
+          {isLoading && !showHome && (
             <div className="typing-indicator">
               <div className="msg-avatar bot">
                 <BotAvatarImg className="msg-bot-logo" />
