@@ -201,7 +201,7 @@ function App() {
             <div className="brand-icon" aria-hidden>
               <img src="/logo.png" alt="" className="brand-logo-img" width={80} height={80} decoding="async" />
             </div>
-            <div>
+            <div className="brand-copy">
               <div className="brand-name">DealAngler</div>
               <div className="brand-tagline">Hyperlocal Marketplace</div>
             </div>
@@ -285,7 +285,7 @@ function App() {
               <div className="chat-header-sub">Powered by Advanced AI · Responds in your language · dealangler.net</div>
             </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+          <div className="chat-header-actions">
             <div className="header-chips">
               <button className="header-chip" onClick={() => handleSendMessage('How do I sell something?')}>🏷️ Sell</button>
               <button className="header-chip" onClick={() => handleSendMessage('How do I find local deals near me?')}>🔍 Buy</button>
