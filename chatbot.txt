@@ -1,0 +1,44 @@
+================================================================================
+AI CHATBOT SYSTEM DOCUMENTATION: DEALANGLER
+================================================================================
+
+AI IDENTITY
+--------------------------------------------------------------------------------
+- Name: LABZ
+- Personality: Warm, confident, knowledgeable, action-oriented.
+- Language: Multilingual (Auto-detects and matches user language).
+- Role: Official AI assistant for DealAngler.net.
+
+MISSION & DESCRIPTION
+--------------------------------------------------------------------------------
+DealAngler is a hyperlocal classifieds marketplace focused on fast, local, and 
+safe trading. LABZ helps buyers find deals, sellers post ads, and businesses 
+gain visibility through specialized promotion packages.
+
+KEY KNOWLEDGE MODULES
+--------------------------------------------------------------------------------
+1. Platform Stats: 120,000+ listings, 2.7m+ daily searches, 20k+ users.
+2. Categories: Community, Electronics, Kids, Real Estate, Services, Vehicles.
+3. Pricing (Upgrades):
+   - Bump Up: $5.00
+   - Standard: $5.00 (5 ads)
+   - Featured: $9.00 (9 ads)
+   - Featured Max: $19.00 (15 ads)
+   - Business Packages: $49.00 - $99.00
+4. Safety: Encourages in-platform messaging, public meetings, and item inspection.
+
+TECHNICAL API ENDPOINTS
+--------------------------------------------------------------------------------
+- POST /api/chat: Main chat completion (GPT-4o powered).
+- POST /api/lead: Captures business or support inquiries.
+- POST /api/analytics: Tracks user events and interactions.
+
+DEVELOPER CHECKLIST
+--------------------------------------------------------------------------------
+- Env Vars: Requires OPENAI_API_KEY in backend/.env.
+- Build: Frontend must be built (dist folder) for the backend to serve it.
+- Deployment: Optimized for Vercel/Node.js environments.
+
+================================================================================
+Generated: 2026-04-04 | DealAngler AI Integration Info
+================================================================================

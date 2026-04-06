@@ -16,8 +16,7 @@ import {
   ShieldCheck, 
   Building, 
   Rocket, 
-  Maximize, 
-  Languages
+  Maximize
 } from 'lucide-react';
 
 const BASE_URL = 'https://dealangler-chatbot-ai-assistant-hwf.vercel.app';
@@ -26,6 +25,19 @@ const API_URL = `${BASE_URL}/api/chat`;
 const LEAD_API_URL = `${BASE_URL}/api/lead`;
 const ANALYTICS_API_URL = `${BASE_URL}/api/analytics`;
 
+function BotAvatarImg({ className }) {
+  return (
+    <img
+      src="/logo.png"
+      alt=""
+      className={className}
+      width={32}
+      height={32}
+      decoding="async"
+    />
+  );
+}
+
 function App() {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
@@ -33,8 +45,7 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [leadData, setLeadData] = useState({});
   const [hasStarted, setHasStarted] = useState(false);
-  const [langBadge, setLangBadge] = useState('🌐 Multilingual');
-  
+
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -85,7 +96,6 @@ function App() {
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
       }]);
 
-      detectLanguage(reply);
       checkLeadCapture(text, reply);
 
     } catch (err) {
@@ -106,25 +116,6 @@ function App() {
     setHasStarted(false);
     setLeadData({});
     setInputText('');
-  };
-
-  const detectLanguage = (text) => {
-    const arabicPattern = /[\u0600-\u06FF]/;
-    const chinesePattern = /[\u4E00-\u9FFF]/;
-    const japanesePattern = /[\u3040-\u30FF]/;
-    const frenchPattern = /\b(bonjour|merci|je|vous|est|les|des|pour)\b/i;
-    const spanishPattern = /\b(hola|gracias|es|los|del|para|como)\b/i;
-    const germanPattern = /\b(hallo|danke|ich|sie|ist|die|der|das)\b/i;
-
-    let lang = '🌐 Multilingual';
-    if (arabicPattern.test(text)) lang = '🇸🇦 Arabic';
-    else if (chinesePattern.test(text)) lang = '🇨🇳 Chinese';
-    else if (japanesePattern.test(text)) lang = '🇯🇵 Japanese';
-    else if (frenchPattern.test(text)) lang = '🇫🇷 French';
-    else if (spanishPattern.test(text)) lang = '🇪🇸 Spanish';
-    else if (germanPattern.test(text)) lang = '🇩🇪 German';
-
-    setLangBadge(lang);
   };
 
   const checkLeadCapture = (userMsg, botReply) => {
@@ -207,7 +198,9 @@ function App() {
         </button>
         <div className="sidebar-header">
           <div className="brand">
-            <div className="brand-icon">🎣</div>
+            <div className="brand-icon" aria-hidden>
+              <img src="/logo.png" alt="" className="brand-logo-img" width={80} height={80} decoding="async" />
+            </div>
             <div>
               <div className="brand-name">DealAngler</div>
               <div className="brand-tagline">Hyperlocal Marketplace</div>
@@ -272,8 +265,22 @@ function App() {
         <header className="chat-header">
           <div className="chat-header-left">
             <button className="menu-toggle" onClick={() => setSidebarOpen(true)}><Menu size={22} /></button>
-            <div className="chat-avatar">🎣</div>
-            <div>
+            {!hasStarted && messages.length > 0 && (
+              <button
+                type="button"
+                className="back-btn"
+                onClick={() => setHasStarted(true)}
+                title="Back to conversation"
+              >
+                ← Chat
+              </button>
+            )}
+            {hasStarted && (
+              <button type="button" className="back-btn" onClick={() => setHasStarted(false)} title="Back to Home">
+                ← Home
+              </button>
+            )}
+            <div className="chat-header-text">
               <div className="chat-header-title">DealAngler AI Assistant</div>
               <div className="chat-header-sub">Powered by Advanced AI · Responds in your language · dealangler.net</div>
             </div>
@@ -293,11 +300,18 @@ function App() {
         <div className="messages-area">
           {!hasStarted && (
             <div className="welcome-state">
-              <div className="welcome-icon">🎣</div>
+              <div className="welcome-icon">
+                <img src="/logo.png" alt="DealAngler" className="welcome-logo-img" width={360} height={120} decoding="async" />
+              </div>
               <h2 className="welcome-title">Welcome to DealAngler</h2>
               <p className="welcome-sub">
                 Your AI-powered local marketplace assistant. Ask me anything about buying, selling, promotions, safety, or advertising — in any language.
               </p>
+              {messages.length > 0 && (
+                <button className="continue-chat-btn" onClick={() => setHasStarted(true)}>
+                  💬 Continue Conversation →
+                </button>
+              )}
               <div className="quick-actions">
                 {[
                   { icon: '📝', label: 'Post an Ad', desc: 'Learn how to list in minutes', text: 'How do I post my first listing on DealAngler?' },
@@ -319,7 +333,9 @@ function App() {
             if (msg.role === 'lead_form') {
               return (
                 <div key={i} className="msg-group">
-                  <div className="msg-avatar bot">🎣</div>
+                  <div className="msg-avatar bot">
+                    <BotAvatarImg className="msg-bot-logo" />
+                  </div>
                   <div className="msg-content" style={{ maxWidth: '420px', width: '100%' }}>
                     <div className="lead-inline">
                       {msg.submitted ? (
@@ -339,7 +355,7 @@ function App() {
             return (
               <div key={i} className={`msg-group ${msg.role === 'user' ? 'user' : ''}`}>
                 <div className={`msg-avatar ${msg.role === 'bot' ? 'bot' : 'user'}`}>
-                  {msg.role === 'bot' ? '🎣' : '👤'}
+                  {msg.role === 'bot' ? <BotAvatarImg className="msg-bot-logo" /> : '👤'}
                 </div>
                 <div className="msg-content">
                   <div 
@@ -354,7 +370,9 @@ function App() {
 
           {isLoading && (
             <div className="typing-indicator">
-              <div className="msg-avatar bot">🎣</div>
+              <div className="msg-avatar bot">
+                <BotAvatarImg className="msg-bot-logo" />
+              </div>
               <div className="typing-bubble">
                 <div className="typing-dot"></div>
                 <div className="typing-dot"></div>
@@ -366,38 +384,38 @@ function App() {
         </div>
 
         <div className="input-area">
-          <div className="input-wrapper">
-            <textarea
-              ref={inputRef}
-              className="chat-input"
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSendMessage();
-                }
-              }}
-              placeholder="Ask about listings, pricing, safety, how to sell, advertise your business..."
-              rows={1}
-              style={{ height: 'auto' }}
-              onInput={(e) => {
-                e.target.style.height = 'auto';
-                e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px';
-              }}
-            />
-            <button 
-              className="send-btn" 
-              onClick={() => handleSendMessage()} 
-              disabled={isLoading || !inputText.trim()}
-              title="Send message"
-            >
-              <Send size={16} className="send-icon" style={{color: 'var(--dark)'}} />
-            </button>
-          </div>
-          <div className="input-footer">
-            <span className="input-hint">Enter to send · Shift+Enter for new line · Ask in any language</span>
-            <span className="lang-badge">{langBadge}</span>
+          <div className="input-composer-inner">
+            <div className="input-wrapper">
+              <textarea
+                ref={inputRef}
+                className="chat-input"
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSendMessage();
+                  }
+                }}
+                placeholder="Message DealAngler…"
+                rows={1}
+                style={{ height: 'auto' }}
+                onInput={(e) => {
+                  e.target.style.height = 'auto';
+                  e.target.style.height = Math.min(e.target.scrollHeight, 140) + 'px';
+                }}
+              />
+              <button
+                type="button"
+                className="send-btn"
+                onClick={() => handleSendMessage()}
+                disabled={isLoading || !inputText.trim()}
+                title="Send"
+                aria-label="Send message"
+              >
+                <Send size={18} className="send-icon" style={{ color: 'var(--dark)' }} />
+              </button>
+            </div>
           </div>
         </div>
       </main>
