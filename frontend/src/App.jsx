@@ -265,8 +265,13 @@ function App() {
         <header className="chat-header">
           <div className="chat-header-left">
             <button className="menu-toggle" onClick={() => setSidebarOpen(true)}><Menu size={22} /></button>
+            {messages.length > 0 && showHome && (
+              <button type="button" className="back-btn" onClick={() => setShowHome(false)} title="Back to conversation">
+                ← Back
+              </button>
+            )}
             {messages.length > 0 && !showHome && (
-              <button type="button" className="back-btn" onClick={() => setShowHome(true)} title="Back to Home">
+              <button type="button" className="back-btn back-btn--home" onClick={() => setShowHome(true)} title="Home">
                 ← Home
               </button>
             )}
