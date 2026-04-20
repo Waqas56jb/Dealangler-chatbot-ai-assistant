@@ -1,7 +1,12 @@
-require("dotenv").config({ path: "./.env" });
+if (process.env.VERCEL !== "1") {
+    require("dotenv").config({ path: "./.env" });
+}
 const express = require("express");
 const cors = require("cors");
+const fs = require("fs");
 const path = require("path");
+
+const isVercel = process.env.VERCEL === "1";
 
 const app = express();
 // ... (server config)
@@ -279,7 +284,7 @@ app.post("/api/realtime-token", async (req, res) => {
             headers: { "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`, "Content-Type": "application/json" },
             body: JSON.stringify({
                 model: "gpt-4o-realtime-preview-2024-12-17",
-                voice: "nova",
+                voice: "shimmer",
                 instructions: `You are LABZ — the official AI assistant for DealAngler (dealangler.net), a hyperlocal classifieds marketplace.
 
 BEGIN IMMEDIATELY — greet the user the moment you connect:
@@ -316,15 +321,21 @@ app.post("/api/analytics", (req, res) => {
     res.json({ success: true });
 });
 
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
+const frontendDist = path.join(__dirname, "../frontend/dist");
 
-// Serve frontend
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
-});
+if (!isVercel && fs.existsSync(frontendDist)) {
+    app.use(express.static(frontendDist));
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(frontendDist, "index.html"));
+    });
+}
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`\n🎣 DealAngler Chatbot Server running on http://localhost:${PORT}`);
-    console.log(`📡 API Key configured: ${process.env.OPENAI_API_KEY ? "✅ YES" : "❌ NO — add to .env"}`);
-});
+if (!isVercel) {
+    app.listen(PORT, () => {
+        console.log(`\n🎣 DealAngler Chatbot Server running on http://localhost:${PORT}`);
+        console.log(`📡 API Key configured: ${process.env.OPENAI_API_KEY ? "✅ YES" : "❌ NO — add to .env"}`);
+    });
+}
+
+module.exports = app;
