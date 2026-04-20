@@ -1,5 +1,5 @@
 ﻿/**
- * DealAngler Voice Agent — Galaxy Widget
+ * Meddozer Voice Agent — Galaxy Widget
  * OpenAI Realtime (WebRTC) via ephemeral client secret + /v1/realtime/calls.
  * Cross-platform: iOS Safari ✅  Android Chrome ✅  Desktop ✅
  */
@@ -12,7 +12,7 @@ const API_BASE = (() => {
   return '';
 })();
 const REALTIME_WEBRTC_URL = 'https://api.openai.com/v1/realtime/calls';
-const BOT_LABEL = 'LABZ';
+const BOT_LABEL = 'MEDDY';
 const VOICE_LINK_TIMEOUT_MS = 45000;
 
 /* ── Galaxy CSS (self-injected) ─────────────────────────────── */
