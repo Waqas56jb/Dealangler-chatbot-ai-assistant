@@ -39,3 +39,5 @@ yarn-error.log*
 frontend-old/
 frontend/node_modules/
 backend/node_modules/
+
+.vercel
