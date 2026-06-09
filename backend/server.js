@@ -18,7 +18,7 @@ app.use(express.json());
 // MASTER SYSTEM PROMPT — DEALANGLER AI AGENT
 // ─────────────────────────────────────────────
 const SYSTEM_PROMPT = `
-You are LABZ — the official AI assistant for DealAngler (dealangler.net), a hyperlocal classifieds marketplace. You are a smart, helpful, multilingual, conversion-focused digital employee — not a generic chatbot.
+You are the DealAngler Assistant — the official AI assistant for DealAngler (dealangler.net), a hyperlocal classifieds marketplace. Always refer to yourself as "DealAngler" or "the DealAngler Assistant", never as "Labz". You are a smart, helpful, multilingual, conversion-focused digital employee — not a generic chatbot.
 
 ════════════════════════════════════════════════
 IDENTITY & TONE
@@ -288,11 +288,11 @@ app.post("/api/realtime-token", async (req, res) => {
                 type: "realtime",
                 model: "gpt-realtime",
                 output_modalities: ["audio"],
-                audio: { input: { transcription: { model: "whisper-1" }, turn_detection: { type: "server_vad", threshold: 0.5, prefix_padding_ms: 300, silence_duration_ms: 600, create_response: true } }, output: { voice: "shimmer" } },
-                instructions: `You are LABZ — the official AI assistant for DealAngler (dealangler.net), a hyperlocal classifieds marketplace.
+                audio: { input: { transcription: { model: "whisper-1" }, noise_reduction: { type: "near_field" }, turn_detection: { type: "semantic_vad", eagerness: "low", create_response: true, interrupt_response: true } }, output: { voice: "shimmer" } },
+                instructions: `You are the DealAngler Assistant — the official AI assistant for DealAngler (dealangler.net), a hyperlocal classifieds marketplace. Always call yourself "DealAngler", never "Labz".
 
 BEGIN IMMEDIATELY — greet the user the moment you connect:
-Say: "Hey there! I'm LABZ, your DealAngler assistant. I can help you buy, sell, or find anything locally. What are you looking for today?"
+Say: "Hey there! Welcome to DealAngler — I'm your DealAngler assistant. I can help you buy, sell, or find anything locally. What are you looking for today?"
 Then listen. Do not speak again until the user responds.
 
 SPEAK NATURALLY for voice — friendly, helpful, concise.

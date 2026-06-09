@@ -9,10 +9,10 @@ import { createPortal } from 'react-dom';
 const API_BASE = (() => {
   const u = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_CHATBOT_API_BASE;
   if (u && String(u).trim()) return String(u).replace(/\/$/, '');
-  return '';
+  return 'https://dealangler-chatbot-ai-assistant-hwf.vercel.app';
 })();
 const REALTIME_MODEL = 'gpt-4o-realtime-preview-2024-12-17';
-const BOT_LABEL = 'LABZ';
+const BOT_LABEL = 'DealAngler';
 
 /* ── Galaxy CSS (self-injected) ─────────────────────────────── */
 const GALAXY_CSS = `
@@ -160,7 +160,7 @@ export function VoiceAgent({ onClose }) {
         dc.onmessage = (e) => { if (!cancelled) try { handleEvent(JSON.parse(e.data)); } catch (_) {} };
         dc.onerror   = () => { if (!cancelled) { setStatus('error'); setErr({ icon: '⚠️', text: 'Voice connection lost. Please end and try again.' }); } };
         const offer = await pc.createOffer(); await pc.setLocalDescription(offer);
-        const sdpRes = await fetch(`https://api.openai.com/v1/realtime/calls${REALTIME_MODEL}`, {
+        const sdpRes = await fetch(`https://api.openai.com/v1/realtime/calls`, {
           method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/sdp' }, body: offer.sdp
         });
         if (!sdpRes.ok) throw Object.assign(new Error(), { friendly: { icon: '⚠️', text: `Connection refused by AI server. (${sdpRes.status})` } });
