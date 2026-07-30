@@ -1,11 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "npm install --prefix backend && npm install --prefix frontend",
-  "buildCommand": "cd frontend && npm run build",
+  "installCommand": "if [ -d ../backend ]; then npm install --prefix ../backend && npm install; elif [ -d backend ]; then npm install --prefix backend && npm install --prefix frontend; else npm install; fi",
+  "buildCommand": "if [ -d frontend ]; then cd frontend && npm run build; else npm run build; fi",
   "outputDirectory": "frontend/dist",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/((?!api/|assets/|widget\\.js|logo\\.png|favicon\\.svg|icons\\.svg).*)", "destination": "/index.html" }
   ],
   "functions": {
     "api/index.js": {

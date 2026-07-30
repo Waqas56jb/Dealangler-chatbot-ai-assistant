@@ -338,6 +338,14 @@ app.post("/api/analytics", (req, res) => {
     res.json({ success: true });
 });
 
+app.get("/api/health", (req, res) => {
+    res.json({
+        status: "online",
+        service: "DealAngler AI Assistant",
+        timestamp: new Date().toISOString(),
+    });
+});
+
 const frontendDist = path.join(__dirname, "../frontend/dist");
 
 if (!isVercel && fs.existsSync(frontendDist)) {
